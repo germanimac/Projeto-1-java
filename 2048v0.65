@@ -1,0 +1,342 @@
+package desenhar;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Desenhar extends Frame {
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args){
+        new janela().show();
+    }
+    
+}
+
+class janela extends Frame  implements KeyListener{
+    quadro[] q = new quadro[16];
+    tile_background[] t = new tile_background[16];
+    Graphics g2;
+    public int num;
+    public int change;
+    public janela() {
+        
+        setSize(521,521);
+        setTitle("2048");
+        for (int i=0; i<this.num;i++)
+        this.q[i] = q[i];
+        addKeyListener(this);
+        addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent we){
+                System.exit(0);
+            }
+        });
+        //generate tile background
+        for(int i=0;i<16;i++){
+            t[i] = new tile_background();
+            this.t[i].x = i%4 * 100 + 61;
+            this.t[i].y =  (int)i/4 * 100 + 71;
+            }
+        this.initialize();
+        this.change = this.num;
+    }
+    
+    public void paint(Graphics g){
+        
+        g.drawRect(40, 50, 421, 421);
+        for (int i=0;i<16;i++){
+            g.setColor(Color.blue);
+            g.fillRect(this.t[i].x, this.t[i].y, 80, 80);
+        }
+        for(int i=0;i<this.q.length;i++){
+            g.setColor(Color.CYAN);
+            try{
+            q[i].draw(g);
+            g.setColor(Color.BLACK);
+            g.drawString("" + this.q[i].valor, this.q[i].x+40, this.q[i].y +40);
+            }
+            catch(Exception e){}
+            this.g2 = g;
+        }
+        
+        
+    }
+    
+    public void keyPressed(KeyEvent ke){
+        
+        int keyCode = ke.getKeyCode();
+        int i;
+        switch(keyCode){
+        
+            case KeyEvent.VK_UP:
+                for(i = 0;i<this.num;i++){
+                    this.change = this.q[i].slide(0, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0;i<this.num;i++){
+                    this.change = this.q[i].slide(0, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0;i<this.num;i++){
+                    this.change = this.q[i].slide(0, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                break;
+            case KeyEvent.VK_LEFT:
+                for(i = 0; i<this.num;i++){
+                        this.change = this.q[i].slide(1, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0; i<this.num;i++){
+                        this.change = this.q[i].slide(1, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0; i<this.num;i++){
+                        this.change = this.q[i].slide(1, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                break;
+            case KeyEvent.VK_RIGHT:
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(2, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(2, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(2, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                
+                break;
+            case KeyEvent.VK_DOWN:
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(3, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(3, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(3, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                
+                
+                
+                break;
+             
+        }
+        for(i = 0;i<this.num;i++)
+            this.q[i].merging = false;
+        generate_block(num);
+        num+=1;
+        repaint();
+        
+    }
+      public void keyTyped(KeyEvent ke){
+        
+    }
+    public void keyReleased(KeyEvent ke){
+        
+    }
+    
+    public void initialize(){
+        
+        for(int j = 0;j<2;j++){
+        generate_block(j);
+        }
+        this.num = 2;
+        return;
+    }
+    public void generate_block(int j){
+        int contcoord = 0;
+        int[] coord = new int [32];
+        for(int i = 0;i<t.length;i++)
+            if(t[i].isopen(this.q)){
+                coord[2*contcoord]= t[i].x;
+                coord[(2*contcoord)+1] = t[i].y;
+                contcoord++;
+            }
+        int a = (int)(Math.random() * contcoord);
+        double b = (Math.random() * 100);
+        int v;
+        if(b<20)v=4;
+        else v=2;
+        this.q[j] = new quadro(coord[2*a],coord[2*a+1],v);
+    }
+}
+
+abstract class Tile {
+    int x,y,valor;
+    abstract boolean collision(quadro[] q, int k, int num);
+    abstract int slide(int x,quadro[]q,int num);
+    
+    
+}
+
+class quadro extends Tile {
+    int x,y,valor;
+    boolean merging;
+    int num;
+    public quadro(int x, int y,int valor) {
+        this.x = x;
+        this.y = y;
+        this.valor=valor;
+        this.merging = false;
+    }
+    
+    public boolean collision(quadro[] q,int k, int num){
+        for(int i=0;i<this.num;i++){
+            switch (k){
+                case 0:
+                    if(this.y == q[i].y +100 && this.x == q[i].x){
+                        if(this.merging == false && this.valor == q[i].valor && !q[i].merging){
+                            merge(q,i,this.num);
+                            i=0;
+                            
+                            
+                        }
+                        
+                        return true;}
+                    break;
+                case 1:
+                    if(this.x == q[i].x +100 && this.y == q[i].y){
+                        if(this.valor == q[i].valor && !this.merging && !q[i].merging){
+                            merge(q,i,this.num);
+                            i=0;
+                            
+                        }
+                        
+                        return true;}
+                    break;
+                    
+                case 2:
+                    if(this.x+100 == q[i].x && this.y == q[i].y){
+                        if(this.valor == q[i].valor && !this.merging && !q[i].merging){
+                            merge(q,i,this.num);
+                            i=0;
+                            
+                        }
+                        
+                        return true;}
+                    break;
+                case 3:
+                    if(this.y+100 == q[i].y && this.x == q[i].x){
+                        if(this.valor == q[i].valor && !this.merging && !q[i].merging){
+                            merge(q,i,this.num);
+                            i=0;
+                            
+                        }
+                        
+                        return true;}
+                    break;
+            
+            }
+        }
+        return false;}
+                     
+    
+    public int slide(int x,quadro[] q,int num){
+        this.num = num;
+        switch(x){
+            case 0:
+                while(this.y>71 && !this.collision(q,0,this.num)){this.y = this.y - 1;}
+                return this.num;
+            case 1:
+                while(this.x>61 && !this.collision(q,1,this.num)){this.x = this.x - 1;}
+                
+                return this.num;
+            case 2:
+                while(this.x<361&& !this.collision(q,2,this.num)){this.x = this.x + 1;}
+                
+                return this.num;
+            case 3:
+                while(this.y<371 && !this.collision(q,3,this.num)){this.y = this.y + 1;}
+                
+                return this.num;
+                
+        }
+        return num;
+    }
+    public void merge(quadro[] q,int i,int num){
+        this.valor = 2*this.valor;
+        this.merging = true;
+        for(;i<num;i++)
+            q[i] = q[i+1];
+        this.num --;
+    }
+    
+    public void draw(Graphics g){
+        
+        g.setColor(Color.CYAN);
+        g.fillRect(this.x, this.y, 80, 80);
+        g.setColor(Color.BLACK);
+        g.drawRect(this.x, this.y, 80, 80);
+    }
+}
+
+class tile_background {
+    public int x,y;
+
+    public tile_background(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public tile_background() {
+    }
+    
+    
+    
+    public boolean isopen(quadro[] q){
+        try{
+        for (int i=0;i<q.length;i++){
+            if (q[i].x == this.x && q[i].y==this.y)
+                return false;
+        }
+        }
+        catch(Exception e){}
+        return true;
+    }
+    
+}
