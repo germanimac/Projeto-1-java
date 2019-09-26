@@ -62,13 +62,8 @@ class janela extends Frame  implements KeyListener{
         this.draw_background(g);
         for(int i=0;i<this.q.length;i++){
             try{
-            
-                
-                
                 q[i].draw(g);
-            }
-            
-            catch(Exception e){}
+            }catch(Exception e){}
         
         
     }
@@ -319,7 +314,7 @@ class janela extends Frame  implements KeyListener{
         g.setColor(Color.decode("#8EB0E6"));
         g.fillRect(40, 50, 421, 421);
         for (int i=0;i<16;i++){
-            g.setColor(Color.blue);
+            g.setColor(Color.decode("#ADD8E6"));
             g.fillRect(this.t[i].x, this.t[i].y, 80, 80);
         }
     }
