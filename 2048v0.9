@@ -324,6 +324,7 @@ class janela extends Frame  implements KeyListener{
                     }
                 break;
                 case KeyEvent.VK_R:
+                charak= false;
                     if(charag && charae){
                         requiem = true;
                         charag=false;
@@ -332,9 +333,11 @@ class janela extends Frame  implements KeyListener{
                     this.initialize();
                     break;
                 case KeyEvent.VK_G:
+                  charak= false;
                     charag=true;
                     break;
                 case KeyEvent.VK_E:
+                    charak= false;
                     charae=true;
                     break;
                  
