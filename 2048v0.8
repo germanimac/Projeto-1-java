@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Desenhar extends Frame {
-    
+   
     /**
      * @param args the command line arguments
      */
@@ -15,11 +15,10 @@ public class Desenhar extends Frame {
 class janela extends Frame  implements KeyListener{
     quadro[] q = new quadro[16];
     tile_background[] t = new tile_background[16];
-    Graphics g2;
     public int num;
     public int change;
     public janela() {
-        
+       
         setSize(521,521);
         setTitle("2048");
         for (int i=0; i<this.num;i++)
@@ -39,60 +38,65 @@ class janela extends Frame  implements KeyListener{
         this.initialize();
         this.change = this.num;
     }
-    
+   
     public void paint(Graphics g){
-        
+       
         this.draw_background(g);
         for(int i=0;i<this.q.length;i++){
             try{
-            
+                
                 if(q[i].merging){
-                    
-                    q[i].animate(g);
-                    
-                    this.q[i].merging = false;}
+                   
+                    q[i].animate_merge(g);
+                   
+                    }
+                else
+                    if(q[i].block_collided)
+                        q[i].animate_collision(g);
+                this.q[i].block_collided=false;
+                this.q[i].merging = false;
                 
                 q[i].draw(g);
             }
-            
+           
             catch(Exception e){}
+        try{Thread.sleep(2);}catch(Exception e){}
             
-            this.g2 = g;
         }
         this.draw_background(g);
         for(int i=0;i<this.q.length;i++){
             try{
                 q[i].draw(g);
             }catch(Exception e){}
-        
-        
+       
+       
     }
 }
-    
+   
     public void keyPressed(KeyEvent ke){
-        
+       
         int keyCode = ke.getKeyCode();
         int i;
-        this.draw_background(g2);
         switch(keyCode){
-        
+       
             case KeyEvent.VK_UP:
                 for(i = 0;i<this.num;i++){
-                    this.change = this.q[i].slide(0, q,this.num,g2);
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(0, q,this.num);
                     if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i = 0;i<this.num;i++){
-                    this.change = this.q[i].slide(0, q,this.num,g2);
+                    this.change = this.q[i].slide(0, q,this.num);
                     if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i = 0;i<this.num;i++){
-                    this.change = this.q[i].slide(0, q,this.num,g2);
+                    this.change = this.q[i].slide(0, q,this.num);
                     if(this.change < this.num){
                         i=0;
                         this.num = this.change;
@@ -101,21 +105,22 @@ class janela extends Frame  implements KeyListener{
                 break;
                 case KeyEvent.VK_W:
                 for(i = 0;i<this.num;i++){
-                    this.change = this.q[i].slide(0, q,this.num,g2);
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(0, q,this.num);
                     if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i = 0;i<this.num;i++){
-                    this.change = this.q[i].slide(0, q,this.num,g2);
+                    this.change = this.q[i].slide(0, q,this.num);
                     if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i = 0;i<this.num;i++){
-                    this.change = this.q[i].slide(0, q,this.num,g2);
+                    this.change = this.q[i].slide(0, q,this.num);
                     if(this.change < this.num){
                         i=0;
                         this.num = this.change;
@@ -124,21 +129,22 @@ class janela extends Frame  implements KeyListener{
                 break;
             case KeyEvent.VK_LEFT:
                 for(i = 0; i<this.num;i++){
-                        this.change = this.q[i].slide(1, q,this.num,g2);
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(1, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                    }
+                }
+                for(i = 0; i<this.num;i++){
+                        this.change = this.q[i].slide(1, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i = 0; i<this.num;i++){
-                        this.change = this.q[i].slide(1, q,this.num,g2);
-                        if(this.change < this.num){
-                        i=0;
-                        this.num = this.change;
-                        }
-                }
-                for(i = 0; i<this.num;i++){
-                        this.change = this.q[i].slide(1, q,this.num,g2);
+                        this.change = this.q[i].slide(1, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
@@ -147,21 +153,22 @@ class janela extends Frame  implements KeyListener{
                 break;
                 case KeyEvent.VK_A:
                 for(i = 0; i<this.num;i++){
-                        this.change = this.q[i].slide(1, q,this.num,g2);
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(1, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0; i<this.num;i++){
+                        this.change = this.q[i].slide(1, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i = 0; i<this.num;i++){
-                        this.change = this.q[i].slide(1, q,this.num,g2);
-                        if(this.change < this.num){
-                        i=0;
-                        this.num = this.change;
-                        }
-                }
-                for(i = 0; i<this.num;i++){
-                        this.change = this.q[i].slide(1, q,this.num,g2);
+                        this.change = this.q[i].slide(1, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
@@ -170,128 +177,138 @@ class janela extends Frame  implements KeyListener{
                 break;
             case KeyEvent.VK_RIGHT:
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(2, q,this.num,g2);
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(2, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(2, q,this.num,g2);
+                    this.change = this.q[i].slide(2, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(2, q,this.num,g2);
+                    this.change = this.q[i].slide(2, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
-                
+               
                 break;
                 case KeyEvent.VK_D:
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(2, q,this.num,g2);
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(2, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(2, q,this.num,g2);
+                    this.change = this.q[i].slide(2, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(2, q,this.num,g2);
+                    this.change = this.q[i].slide(2, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
-                
+               
                 break;
             case KeyEvent.VK_DOWN:
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(3, q,this.num,g2);
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(3, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(3, q,this.num,g2);
+                    this.change = this.q[i].slide(3, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(3, q,this.num,g2);
+                    this.change = this.q[i].slide(3, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
-                
-                
-                
+               
+               
+               
                 break;
                 case KeyEvent.VK_S:
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(3, q,this.num,g2);
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(3, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(3, q,this.num,g2);
+                    this.change = this.q[i].slide(3, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
                 for(i=0;i<this.num;i++){
-                    this.change = this.q[i].slide(3, q,this.num,g2);
+                    this.change = this.q[i].slide(3, q,this.num);
                         if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
                 }
-                
-                
-                
+               
+               
+               
                 break;
              
         }
-        
-        generate_block(num);
-        num+=1;
+        try{
+        for(i=0; i<16;i++)
+            if(q[i].moved || q[i].merging){
+                generate_block(num);
+                num+=1;
+                break;
+            }
+        }
+        catch(Exception e){}
         repaint();
-        
+       
     }
       public void keyTyped(KeyEvent ke){
-        
+       
     }
     public void keyReleased(KeyEvent ke){
-        
+       
     }
-    
+   
     public void initialize(){
-        
+       
         for(int j = 0;j<2;j++){
         generate_block(j);
         }
         this.num = 2;
         return;
     }
-    
+   
     public void generate_block(int j){
         int contcoord = 0;
         int[] coord = new int [32];
@@ -308,7 +325,7 @@ class janela extends Frame  implements KeyListener{
         else v=2;
         this.q[j] = new quadro(coord[2*a],coord[2*a+1],v);
     }
-    
+   
     public void draw_background(Graphics g){
         g.drawRect(40, 50, 421, 421);
         g.setColor(Color.decode("#8EB0E6"));
@@ -322,10 +339,10 @@ class janela extends Frame  implements KeyListener{
 
 abstract class Tile {
     int x,y,valor;
-    abstract boolean collision(quadro[] q, int k, int num,Graphics g);
-    abstract int slide(int x,quadro[]q,int num,Graphics g);
-    
-    
+    abstract boolean collision(quadro[] q, int k, int num);
+    abstract int slide(int x,quadro[]q,int num);
+   
+   
 }
 
 class quadro extends Tile {
@@ -333,6 +350,8 @@ class quadro extends Tile {
     boolean merging;
     int num;
     Color c;
+    boolean moved = false;
+    boolean block_collided = false;
     public quadro(int x, int y,int valor) {
         this.x = x;
         this.y = y;
@@ -340,93 +359,113 @@ class quadro extends Tile {
         this.merging = false;
         this.generate_color();
     }
-    
-    public boolean collision(quadro[] q,int k, int num,Graphics g){
+   
+    public boolean collision(quadro[] q,int k, int num){
         for(int i=0;i<this.num;i++){
             switch (k){
                 case 0:
                     if(this.y == q[i].y +100 && this.x == q[i].x){
                         if(this.merging == false && this.valor == q[i].valor && !q[i].merging){
-                            merge(q,i,this.num,g);
+                            merge(q,i,this.num);
                             i=0;
-                            
-                            
+                           
+                           
                         }
-                        
+                        else
+                            if(!this.merging && this.moved)
+                                this.block_collided=true;
+                       
                         return true;}
                     break;
                 case 1:
                     if(this.x == q[i].x +100 && this.y == q[i].y){
                         if(this.valor == q[i].valor && !this.merging && !q[i].merging){
-                            merge(q,i,this.num,g);
+                            merge(q,i,this.num);
                             i=0;
-                            
+                           
                         }
-                        
+                        else
+                            if(!this.merging && this.moved)
+                                this.block_collided=true;
                         return true;}
                     break;
-                    
+                   
                 case 2:
                     if(this.x+100 == q[i].x && this.y == q[i].y){
                         if(this.valor == q[i].valor && !this.merging && !q[i].merging){
-                            merge(q,i,this.num,g);
+                            merge(q,i,this.num);
                             i=0;
-                            
+                           
                         }
-                        
+                        else
+                            if(!this.merging && this.moved)
+                                this.block_collided=true;
                         return true;}
                     break;
                 case 3:
                     if(this.y+100 == q[i].y && this.x == q[i].x){
                         if(this.valor == q[i].valor && !this.merging && !q[i].merging){
-                            merge(q,i,this.num,g);
+                            merge(q,i,this.num);
                             i=0;
-                            
+                           
                         }
-                        
+                        else
+                            if(!this.merging && this.moved)
+                                this.block_collided=true;
                         return true;}
                     break;
-            
+           
             }
         }
         return false;}
                      
-    
-    public int slide(int x,quadro[] q,int num,Graphics g){
+   
+    public int slide(int x,quadro[] q,int num){
         this.num = num;
-        this.draw(g); 
         switch(x){
             case 0:
-                while(this.y>71 && !this.collision(q,0,this.num,g)){this.y = this.y - 1;}
+                while(this.y>71 && !this.collision(q,0,this.num)){
+                    this.y = this.y - 100;
+                    this.moved = true;
+                }
                 return this.num;
             case 1:
-                while(this.x>61 && !this.collision(q,1,this.num,g)){this.x = this.x - 1;}
-                
+                while(this.x>61 && !this.collision(q,1,this.num)){
+                    this.x = this.x - 100;
+                    this.moved = true;
+                }
+               
                 return this.num;
             case 2:
-                while(this.x<361&& !this.collision(q,2,this.num,g)){this.x = this.x + 1;}
-                
+                while(this.x<361&& !this.collision(q,2,this.num)){
+                    this.x = this.x + 100;
+                    this.moved = true;
+                }
+               
                 return this.num;
             case 3:
-                while(this.y<371 && !this.collision(q,3,this.num,g)){this.y = this.y + 1;}
-                
+                while(this.y<371 && !this.collision(q,3,this.num)){
+                    this.y = this.y + 100;
+                    this.moved = true;
+                }
+               
                 return this.num;
-                
+               
         }
         return num;
     }
-    public void merge(quadro[] q,int i,int num,Graphics g){
+    public void merge(quadro[] q,int i,int num){
         this.valor = 2*this.valor;
         this.merging = true;
         for(;i<num;i++)
             q[i] = q[i+1];
         this.num --;
         this.generate_color();
-        this.animate(g);
-    }
-    
-    public void draw(Graphics g){
         
+    }
+   
+    public void draw(Graphics g){
+       
         g.setColor(c);
         g.fillRect(this.x, this.y, 80, 80);
         g.setColor(Color.BLACK);
@@ -437,7 +476,7 @@ class quadro extends Tile {
             g.setColor(Color.WHITE);
         g.drawString("" + this.valor, this.x+40, this.y +40);
     }
-    
+   
     public void generate_color(){
         switch(this.valor){
             case 2:
@@ -473,24 +512,34 @@ class quadro extends Tile {
             case 2048:
                 c = Color.decode("#edc22e");
                 break;
-        
-        
+       
+       
         }
     }
-    
-    public void animate(Graphics g){
+   
+    public void animate_merge(Graphics g){
         int k = 0;
-        Graphics2D g2;
-        g2 = (Graphics2D)g;
-        for(k=0;k<4000;k++){
+        for(k=0;k<1000;k++){
             g.setColor(c);
-            g.fillRect(this.x-5*k/2000, this.y-5*k/2000, 80 + 10*k/2000, 80 + 10*k/2000);
-        }
-        for(k=4000;k>0;k--){
-            g.setColor(c);
-            g.fillRect(this.x, this.y, 80 , 80 );
+            g.fillRect(this.x-5*k/500, this.y-5*k/500, 80 + 10*k/500, 80 + 10*k/500);
         }
         
+       
+    }
+    
+    public void animate_collision(Graphics g){
+        int k = 0;
+        for(k=k;k<250;k++){
+            g.setColor(c);
+            g.fillRect(this.x-10*k/250,this.y-10*k/250,80,80);
+            g.setColor(Color.BLACK);
+            g.drawRect(this.x-10*k/250,this.y-10*k/250,80,80);
+            k++;
+            g.setColor(c);
+            g.fillRect(this.x+10*k/250,this.y+10*k/250,80,80);
+            g.setColor(Color.BLACK);
+            g.drawRect(this.x+10*k/250,this.y+10*k/250,80,80);
+        }
     }
 }
 
@@ -515,5 +564,5 @@ class tile_background {
         catch(Exception e){}
         return true;
     }
-    
+   
 }
