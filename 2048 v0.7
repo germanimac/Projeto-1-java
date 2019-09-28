@@ -78,6 +78,7 @@ class janela extends Frame  implements KeyListener{
        
             case KeyEvent.VK_UP:
                 for(i = 0;i<this.num;i++){
+                    q[i].moved = false;
                     this.change = this.q[i].slide(0, q,this.num,g2);
                     if(this.change < this.num){
                         i=0;
@@ -101,6 +102,7 @@ class janela extends Frame  implements KeyListener{
                 break;
                 case KeyEvent.VK_W:
                 for(i = 0;i<this.num;i++){
+                    q[i].moved = false;
                     this.change = this.q[i].slide(0, q,this.num,g2);
                     if(this.change < this.num){
                         i=0;
@@ -124,11 +126,12 @@ class janela extends Frame  implements KeyListener{
                 break;
             case KeyEvent.VK_LEFT:
                 for(i = 0; i<this.num;i++){
-                        this.change = this.q[i].slide(1, q,this.num,g2);
-                        if(this.change < this.num){
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(1, q,this.num,g2);
+                    if(this.change < this.num){
                         i=0;
                         this.num = this.change;
-                        }
+                    }
                 }
                 for(i = 0; i<this.num;i++){
                         this.change = this.q[i].slide(1, q,this.num,g2);
@@ -147,8 +150,9 @@ class janela extends Frame  implements KeyListener{
                 break;
                 case KeyEvent.VK_A:
                 for(i = 0; i<this.num;i++){
-                        this.change = this.q[i].slide(1, q,this.num,g2);
-                        if(this.change < this.num){
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(1, q,this.num,g2);
+                    if(this.change < this.num){
                         i=0;
                         this.num = this.change;
                         }
@@ -170,6 +174,7 @@ class janela extends Frame  implements KeyListener{
                 break;
             case KeyEvent.VK_RIGHT:
                 for(i=0;i<this.num;i++){
+                    q[i].moved = false;
                     this.change = this.q[i].slide(2, q,this.num,g2);
                         if(this.change < this.num){
                         i=0;
@@ -194,6 +199,7 @@ class janela extends Frame  implements KeyListener{
                 break;
                 case KeyEvent.VK_D:
                 for(i=0;i<this.num;i++){
+                    q[i].moved = false;
                     this.change = this.q[i].slide(2, q,this.num,g2);
                         if(this.change < this.num){
                         i=0;
@@ -218,6 +224,7 @@ class janela extends Frame  implements KeyListener{
                 break;
             case KeyEvent.VK_DOWN:
                 for(i=0;i<this.num;i++){
+                    q[i].moved = false;
                     this.change = this.q[i].slide(3, q,this.num,g2);
                         if(this.change < this.num){
                         i=0;
@@ -244,6 +251,7 @@ class janela extends Frame  implements KeyListener{
                 break;
                 case KeyEvent.VK_S:
                 for(i=0;i<this.num;i++){
+                    q[i].moved = false;
                     this.change = this.q[i].slide(3, q,this.num,g2);
                         if(this.change < this.num){
                         i=0;
@@ -274,7 +282,9 @@ class janela extends Frame  implements KeyListener{
         for(i=0; i<16;i++)
             if(q[i].moved || q[i].merging){
                 generate_block(num);
-                num+=1;}
+                num+=1;
+                break;
+            }
         }
         catch(Exception e){}
         repaint();
@@ -400,7 +410,6 @@ class quadro extends Tile {
     public int slide(int x,quadro[] q,int num,Graphics g){
         this.num = num;
         this.draw(g);
-        moved = false;
         switch(x){
             case 0:
                 while(this.y>71 && !this.collision(q,0,this.num,g)){
