@@ -17,8 +17,13 @@ class janela extends Frame  implements KeyListener{
     tile_background[] t = new tile_background[16];
     public int num;
     public int change;
+    public int score; 
+    public boolean charak = false;
+    public boolean charag = false;
+    public boolean charae = false;
+    public boolean requiem = false;
     public janela() {
-       
+        score = 0;
         setSize(521,521);
         setTitle("2048");
         for (int i=0; i<this.num;i++)
@@ -40,13 +45,18 @@ class janela extends Frame  implements KeyListener{
     }
    
     public void paint(Graphics g){
-       
+        if(requiem){
+            this.gold_experience_requiem(g);
+            try{Thread.sleep(20);}catch(Exception e){}
+            requiem = false;
+            repaint();
+        }
         this.draw_background(g);
         for(int i=0;i<this.q.length;i++){
             try{
                 
                 if(q[i].merging){
-                   
+                    score = score+q[i].valor;
                     q[i].animate_merge(g);
                    
                     }
@@ -61,14 +71,14 @@ class janela extends Frame  implements KeyListener{
            
             catch(Exception e){}
         try{Thread.sleep(2);}catch(Exception e){}
-            
+        
         }
         this.draw_background(g);
         for(int i=0;i<this.q.length;i++){
             try{
                 q[i].draw(g);
             }catch(Exception e){}
-       
+       g.drawString(Integer.toString(this.score),350 ,40 );
        
     }
 }
@@ -80,6 +90,9 @@ class janela extends Frame  implements KeyListener{
         switch(keyCode){
        
             case KeyEvent.VK_UP:
+                charak = false;
+                charag=false;
+                charae=false;
                 for(i = 0;i<this.num;i++){
                     q[i].moved = false;
                     this.change = this.q[i].slide(0, q,this.num);
@@ -104,6 +117,9 @@ class janela extends Frame  implements KeyListener{
                 }
                 break;
                 case KeyEvent.VK_W:
+                charak = false;
+                charag=false;
+                charae=false;
                 for(i = 0;i<this.num;i++){
                     q[i].moved = false;
                     this.change = this.q[i].slide(0, q,this.num);
@@ -128,6 +144,9 @@ class janela extends Frame  implements KeyListener{
                 }
                 break;
             case KeyEvent.VK_LEFT:
+                charak = false;
+                charag=false;
+                charae=false;
                 for(i = 0; i<this.num;i++){
                     q[i].moved = false;
                     this.change = this.q[i].slide(1, q,this.num);
@@ -152,12 +171,15 @@ class janela extends Frame  implements KeyListener{
                 }
                 break;
                 case KeyEvent.VK_A:
-                for(i = 0; i<this.num;i++){
-                    q[i].moved = false;
-                    this.change = this.q[i].slide(1, q,this.num);
-                    if(this.change < this.num){
-                        i=0;
-                        this.num = this.change;
+                    charak = false;
+                    charag=false;
+                    charae=false;
+                    for(i = 0; i<this.num;i++){
+                        q[i].moved = false;
+                        this.change = this.q[i].slide(1, q,this.num);
+                        if(this.change < this.num){
+                            i=0;
+                            this.num = this.change;
                         }
                 }
                 for(i = 0; i<this.num;i++){
@@ -176,6 +198,9 @@ class janela extends Frame  implements KeyListener{
                 }
                 break;
             case KeyEvent.VK_RIGHT:
+                charak = false;
+                charag=false;
+                charae=false;
                 for(i=0;i<this.num;i++){
                     q[i].moved = false;
                     this.change = this.q[i].slide(2, q,this.num);
@@ -201,6 +226,9 @@ class janela extends Frame  implements KeyListener{
                
                 break;
                 case KeyEvent.VK_D:
+                charak = false;
+                charag=false;
+                charae=false;                    
                 for(i=0;i<this.num;i++){
                     q[i].moved = false;
                     this.change = this.q[i].slide(2, q,this.num);
@@ -226,6 +254,9 @@ class janela extends Frame  implements KeyListener{
                
                 break;
             case KeyEvent.VK_DOWN:
+                charak = false;
+                charag=false;
+                charae=false;
                 for(i=0;i<this.num;i++){
                     q[i].moved = false;
                     this.change = this.q[i].slide(3, q,this.num);
@@ -253,6 +284,9 @@ class janela extends Frame  implements KeyListener{
                
                 break;
                 case KeyEvent.VK_S:
+                    charak = false;
+                    charag=false;
+                    charae=false;
                 for(i=0;i<this.num;i++){
                     q[i].moved = false;
                     this.change = this.q[i].slide(3, q,this.num);
@@ -279,7 +313,31 @@ class janela extends Frame  implements KeyListener{
                
                
                 break;
-             
+                case KeyEvent.VK_K:
+                    charak = true;
+                    break;
+                    
+                case KeyEvent.VK_C:
+                    if(charak){
+                        charak = false;
+                        this.king_crimson();
+                    }
+                break;
+                case KeyEvent.VK_R:
+                    if(charag && charae){
+                        requiem = true;
+                        charag=false;
+                        charae=false;
+                    }
+                    this.initialize();
+                    break;
+                case KeyEvent.VK_G:
+                    charag=true;
+                    break;
+                case KeyEvent.VK_E:
+                    charae=true;
+                    break;
+                 
         }
         try{
         for(i=0; i<16;i++)
@@ -301,7 +359,8 @@ class janela extends Frame  implements KeyListener{
     }
    
     public void initialize(){
-       
+        q = new quadro[16];
+        this.score = 0;
         for(int j = 0;j<2;j++){
         generate_block(j);
         }
@@ -335,6 +394,32 @@ class janela extends Frame  implements KeyListener{
             g.fillRect(this.t[i].x, this.t[i].y, 80, 80);
         }
     }
+    
+    public void king_crimson(){
+        q = new quadro[16];
+        q[0] = new quadro(61,71,1024);
+        q[1] = new quadro(161,71,1024);
+    }
+    
+    public void gold_experience_requiem(Graphics g){
+        int i;
+        Frame[] f = new Frame[200];
+        for(i=0;i<100;i++){
+            f[i]=new Frame();
+            f[i].setSize(400, 400);
+            f[i].setLocation(14*i, 4*i);
+            f[i].setBackground(Color.decode("#DE64AA"));
+            f[i].paint(g);
+            f[i].setVisible(true);
+            
+            
+        }
+        for (i=0;i<100;i++)
+            f[i].setVisible(false);
+        f = null;
+        
+    }
+    
 }
 
 abstract class Tile {
@@ -566,3 +651,4 @@ class tile_background {
     }
    
 }
+
