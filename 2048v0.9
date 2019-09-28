@@ -1,0 +1,681 @@
+package desenhar;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.*;
+
+public class Desenhar extends Frame {
+   
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args){
+        new janela().show();
+    }    
+}
+
+class janela extends Frame  implements KeyListener{
+    quadro[] q = new quadro[16];
+    tile_background[] t = new tile_background[16];
+    public int num;
+    public int change;
+    public int score; 
+    public boolean charak = false;
+    public boolean charag = false;
+    public boolean charae = false;
+    public boolean requiem = false;
+    public boolean kingcrimson=false;
+    public janela() {
+        score = 0;
+        setSize(521,521);
+        setTitle("2048");
+        for (int i=0; i<this.num;i++)
+        this.q[i] = q[i];
+        addKeyListener(this);
+        addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent we){
+                System.exit(0);
+            }
+        });
+        //generate tile background
+        for(int i=0;i<16;i++){
+            t[i] = new tile_background();
+            this.t[i].x = i%4 * 100 + 61;
+            this.t[i].y =  (int)i/4 * 100 + 71;
+            }
+        this.initialize();
+        this.change = this.num;
+    }
+   
+    public void paint(Graphics g){
+        if(requiem){
+            this.gold_experience_requiem(g);
+            try{Thread.sleep(20);}catch(Exception e){}
+            requiem = false;
+            repaint();
+        }
+        if(kingcrimson){
+            this.king_crimson(g);
+            kingcrimson=false;
+            repaint();
+        }
+        this.draw_background(g);
+        for(int i=0;i<this.q.length;i++){
+            try{
+                
+                if(q[i].merging){
+                    score = score+q[i].valor;
+                    q[i].animate_merge(g);
+                   
+                    }
+                else
+                    if(q[i].block_collided)
+                        q[i].animate_collision(g);
+                this.q[i].block_collided=false;
+                this.q[i].merging = false;
+                
+                q[i].draw(g);
+            }
+           
+            catch(Exception e){}
+        try{Thread.sleep(2);}catch(Exception e){}
+        
+        }
+        this.draw_background(g);
+        for(int i=0;i<this.q.length;i++){
+            try{
+                q[i].draw(g);
+            }catch(Exception e){}
+       g.drawString(Integer.toString(this.score),350 ,40 );
+       
+    }
+}
+   
+    public void keyPressed(KeyEvent ke){
+       
+        int keyCode = ke.getKeyCode();
+        int i;
+        switch(keyCode){
+       
+            case KeyEvent.VK_UP:
+                charak = false;
+                charag=false;
+                charae=false;
+                for(i = 0;i<this.num;i++){
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(0, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0;i<this.num;i++){
+                    this.change = this.q[i].slide(0, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0;i<this.num;i++){
+                    this.change = this.q[i].slide(0, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                break;
+                case KeyEvent.VK_W:
+                charak = false;
+                charag=false;
+                charae=false;
+                for(i = 0;i<this.num;i++){
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(0, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0;i<this.num;i++){
+                    this.change = this.q[i].slide(0, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0;i<this.num;i++){
+                    this.change = this.q[i].slide(0, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                break;
+            case KeyEvent.VK_LEFT:
+                charak = false;
+                charag=false;
+                charae=false;
+                for(i = 0; i<this.num;i++){
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(1, q,this.num);
+                    if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                    }
+                }
+                for(i = 0; i<this.num;i++){
+                        this.change = this.q[i].slide(1, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0; i<this.num;i++){
+                        this.change = this.q[i].slide(1, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                break;
+                case KeyEvent.VK_A:
+                    charak = false;
+                    charag=false;
+                    charae=false;
+                    for(i = 0; i<this.num;i++){
+                        q[i].moved = false;
+                        this.change = this.q[i].slide(1, q,this.num);
+                        if(this.change < this.num){
+                            i=0;
+                            this.num = this.change;
+                        }
+                }
+                for(i = 0; i<this.num;i++){
+                        this.change = this.q[i].slide(1, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i = 0; i<this.num;i++){
+                        this.change = this.q[i].slide(1, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                break;
+            case KeyEvent.VK_RIGHT:
+                charak = false;
+                charag=false;
+                charae=false;
+                for(i=0;i<this.num;i++){
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(2, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(2, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(2, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+               
+                break;
+                case KeyEvent.VK_D:
+                charak = false;
+                charag=false;
+                charae=false;                    
+                for(i=0;i<this.num;i++){
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(2, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(2, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(2, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+               
+                break;
+            case KeyEvent.VK_DOWN:
+                charak = false;
+                charag=false;
+                charae=false;
+                for(i=0;i<this.num;i++){
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(3, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(3, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(3, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+               
+               
+               
+                break;
+                case KeyEvent.VK_S:
+                    charak = false;
+                    charag=false;
+                    charae=false;
+                for(i=0;i<this.num;i++){
+                    q[i].moved = false;
+                    this.change = this.q[i].slide(3, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(3, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+                for(i=0;i<this.num;i++){
+                    this.change = this.q[i].slide(3, q,this.num);
+                        if(this.change < this.num){
+                        i=0;
+                        this.num = this.change;
+                        }
+                }
+               
+               
+               
+                break;
+                case KeyEvent.VK_K:
+                    charak = true;
+                    break;
+                    
+                case KeyEvent.VK_C:
+                    if(charak){
+                        charak = false;
+                        kingcrimson=true;
+                    }
+                break;
+                case KeyEvent.VK_R:
+                    charak= false;
+                    if(charag && charae){
+                        requiem = true;
+                        charag=false;
+                        charae=false;
+                    }
+                    this.initialize();
+                    break;
+                case KeyEvent.VK_G:
+                    charak= false;
+                    charag=true;
+                    break;
+                case KeyEvent.VK_E:
+                    charak= false;
+                    charae=true;
+                    break;
+                 
+        }
+        try{
+        for(i=0; i<16;i++)
+            if(q[i].moved || q[i].merging){
+                generate_block(num);
+                num+=1;
+                break;
+            }
+        }
+        catch(Exception e){}
+        repaint();
+       
+    }
+      public void keyTyped(KeyEvent ke){
+       
+    }
+    public void keyReleased(KeyEvent ke){
+       
+    }
+   
+    public void initialize(){
+        q = new quadro[16];
+        this.score = 0;
+        for(int j = 0;j<2;j++){
+        generate_block(j);
+        }
+        this.num = 2;
+        return;
+    }
+   
+    public void generate_block(int j){
+        int contcoord = 0;
+        int[] coord = new int [32];
+        for(int i = 0;i<t.length;i++)
+            if(t[i].isopen(this.q)){
+                coord[2*contcoord]= t[i].x;
+                coord[(2*contcoord)+1] = t[i].y;
+                contcoord++;
+            }
+        int a = (int)(Math.random() * contcoord);
+        double b = (Math.random() * 100);
+        int v;
+        if(b<20)v=4;
+        else v=2;
+        this.q[j] = new quadro(coord[2*a],coord[2*a+1],v);
+    }
+   
+    public void draw_background(Graphics g){
+        g.setColor(Color.BLACK);
+        g.drawRect(40, 50, 421, 421);
+        g.setColor(Color.decode("#8EB0E6"));
+        g.fillRect(41, 51, 420, 420);
+        for (int i=0;i<16;i++){
+            g.setColor(Color.decode("#ADD8E6"));
+            g.fillRect(this.t[i].x, this.t[i].y, 80, 80);
+        }
+    }
+   
+    public void king_crimson(Graphics g){
+        try{
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        MediaTracker tracker = new MediaTracker(this);
+        Image image = toolkit.getImage("C:\\Users\\Usuario\\Desktop\\tudo\\PUC\\paradigmasb\\kingcrimson.jpg");
+        tracker.addImage(image, 0);
+        try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
+        g.drawImage(image,0,0,image.getWidth(this),image.getHeight(this), this);
+        try{Thread.sleep(50);}catch(Exception e){}}catch(Exception e){}
+        q = new quadro[16];
+        q[0] = new quadro(61,71,1024);
+        q[1] = new quadro(161,71,1024);
+        this.num =2;
+    }
+    
+    public void gold_experience_requiem(Graphics g){
+        int i;
+        Frame[] f = new Frame[200];
+        for(i=0;i<100;i++){
+            f[i]=new Frame();
+            f[i].setSize(400, 400);
+            f[i].setLocation(14*i, 4*i);
+            f[i].setTitle("Wha_");
+        }
+        for (i=0;i<100;i++){
+            f[i].setVisible(true);
+            try{Toolkit toolkit = Toolkit.getDefaultToolkit();
+            MediaTracker tracker = new MediaTracker(f[i]);
+            Image image = toolkit.getImage("C:\\Users\\Usuario\\Desktop\\tudo\\PUC\\paradigmasb\\diavolo.jpeg");
+            tracker.addImage(image, 0);
+            try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
+             Graphics g2 = f[i].getGraphics();
+             g2.drawImage(image,0,0, f[i]);}
+            catch(Exception e){}
+        } 
+        for (i=99;i>=0;i--){
+        f[i].setVisible(false);
+        }
+        f = null;
+        
+    }
+    
+}
+
+abstract class Tile {
+    int x,y,valor;
+    abstract boolean collision(quadro[] q, int k, int num);
+    abstract int slide(int x,quadro[]q,int num);
+   
+   
+}
+
+class quadro extends Tile {
+    int x,y,valor;
+    boolean merging;
+    int num;
+    Color c;
+    boolean moved = false;
+    boolean block_collided = false;
+    public quadro(int x, int y,int valor) {
+        this.x = x;
+        this.y = y;
+        this.valor=valor;
+        this.merging = false;
+        this.generate_color();
+    }
+   
+    public boolean collision(quadro[] q,int k, int num){
+        for(int i=0;i<this.num;i++){
+            switch (k){
+                case 0:
+                    if(this.y == q[i].y +100 && this.x == q[i].x){
+                        if(this.merging == false && this.valor == q[i].valor && !q[i].merging){
+                            merge(q,i,this.num);
+                            i=0;
+                           
+                           
+                        }
+                        else
+                            if(!this.merging && this.moved)
+                                this.block_collided=true;
+                       
+                        return true;}
+                    break;
+                case 1:
+                    if(this.x == q[i].x +100 && this.y == q[i].y){
+                        if(this.valor == q[i].valor && !this.merging && !q[i].merging){
+                            merge(q,i,this.num);
+                            i=0;
+                           
+                        }
+                        else
+                            if(!this.merging && this.moved)
+                                this.block_collided=true;
+                        return true;}
+                    break;
+                   
+                case 2:
+                    if(this.x+100 == q[i].x && this.y == q[i].y){
+                        if(this.valor == q[i].valor && !this.merging && !q[i].merging){
+                            merge(q,i,this.num);
+                            i=0;
+                           
+                        }
+                        else
+                            if(!this.merging && this.moved)
+                                this.block_collided=true;
+                        return true;}
+                    break;
+                case 3:
+                    if(this.y+100 == q[i].y && this.x == q[i].x){
+                        if(this.valor == q[i].valor && !this.merging && !q[i].merging){
+                            merge(q,i,this.num);
+                            i=0;
+                           
+                        }
+                        else
+                            if(!this.merging && this.moved)
+                                this.block_collided=true;
+                        return true;}
+                    break;
+           
+            }
+        }
+        return false;}
+                     
+   
+    public int slide(int x,quadro[] q,int num){
+        this.num = num;
+        switch(x){
+            case 0:
+                while(this.y>71 && !this.collision(q,0,this.num)){
+                    this.y = this.y - 100;
+                    this.moved = true;
+                }
+                return this.num;
+            case 1:
+                while(this.x>61 && !this.collision(q,1,this.num)){
+                    this.x = this.x - 100;
+                    this.moved = true;
+                }
+               
+                return this.num;
+            case 2:
+                while(this.x<361&& !this.collision(q,2,this.num)){
+                    this.x = this.x + 100;
+                    this.moved = true;
+                }
+               
+                return this.num;
+            case 3:
+                while(this.y<371 && !this.collision(q,3,this.num)){
+                    this.y = this.y + 100;
+                    this.moved = true;
+                }
+               
+                return this.num;
+               
+        }
+        return num;
+    }
+    public void merge(quadro[] q,int i,int num){
+        this.valor = 2*this.valor;
+        this.merging = true;
+        for(;i<num;i++)
+            q[i] = q[i+1];
+        this.num --;
+        this.generate_color();
+        
+    }
+   
+    public void draw(Graphics g){
+       
+        g.setColor(c);
+        g.fillRect(this.x, this.y, 80, 80);
+        g.setColor(Color.BLACK);
+        g.drawRect(this.x, this.y, 80, 80);
+        if(this.valor == 2 || this.valor == 4)
+            g.setColor(Color.BLACK);
+        else
+            g.setColor(Color.WHITE);
+        g.drawString("" + this.valor, this.x+40, this.y +40);
+    }
+   
+    public void generate_color(){
+        switch(this.valor){
+            case 2:
+                c = Color.decode("#eee4da");
+                break;
+            case 4:
+                c = Color.decode("#ede0c8");
+                break;
+            case 8:
+                c = Color.decode("#f2b179");
+                break;
+            case 16:
+                c = Color.decode("#f59563");
+                break;
+            case 32:
+                c = Color.decode("#f67c5f");
+                break;
+            case 64:
+                c = Color.decode("#f65e3b");
+                break;
+            case 128:
+                c = Color.decode("#edcf72");
+                break;
+            case 256:
+                c = Color.decode("#edcc61");
+                break;
+            case 512:
+                c = Color.decode("#edc850");
+                break;
+            case 1024:
+                c = Color.decode("#edc53f");
+                break;
+            case 2048:
+                c = Color.decode("#edc22e");
+                break;
+       
+       
+        }
+    }
+   
+    public void animate_merge(Graphics g){
+        int k = 0;
+        for(k=0;k<1000;k++){
+            g.setColor(c);
+            g.fillRect(this.x-5*k/500, this.y-5*k/500, 80 + 10*k/500, 80 + 10*k/500);
+        }
+        
+       
+    }
+    
+    public void animate_collision(Graphics g){
+        int k = 0;
+        for(k=k;k<250;k++){
+            g.setColor(c);
+            g.fillRect(this.x-10*k/250,this.y-10*k/250,80,80);
+            g.setColor(Color.BLACK);
+            g.drawRect(this.x-10*k/250,this.y-10*k/250,80,80);
+            k++;
+            g.setColor(c);
+            g.fillRect(this.x+10*k/250,this.y+10*k/250,80,80);
+            g.setColor(Color.BLACK);
+            g.drawRect(this.x+10*k/250,this.y+10*k/250,80,80);
+        }
+    }
+}
+
+class tile_background {
+    public int x,y;
+
+    public tile_background(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public tile_background() {
+    }
+       
+    public boolean isopen(quadro[] q){
+        try{
+        for (int i=0;i<q.length;i++){
+            if (q[i].x == this.x && q[i].y==this.y)
+                return false;
+        }
+        }
+        catch(Exception e){}
+        return true;
+    }
+   
+}
