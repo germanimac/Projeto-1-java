@@ -418,6 +418,7 @@ class janela extends Frame  implements KeyListener{
         q = new quadro[16];
         q[0] = new quadro(61,71,1024);
         q[1] = new quadro(161,71,1024);
+        this.num =2;
     }
     
     public void gold_experience_requiem(Graphics g){
@@ -427,6 +428,7 @@ class janela extends Frame  implements KeyListener{
             f[i]=new Frame();
             f[i].setSize(400, 400);
             f[i].setLocation(14*i, 4*i);
+            f[i].setTitle("Wha_");
         }
         for (i=0;i<100;i++){
             f[i].setVisible(true);
@@ -438,7 +440,6 @@ class janela extends Frame  implements KeyListener{
              Graphics g2 = f[i].getGraphics();
              g2.drawImage(image,0,0, f[i]);}
             catch(Exception e){}
-           
         } 
         for (i=99;i>=0;i--){
         f[i].setVisible(false);
