@@ -414,7 +414,7 @@ class janela extends Frame  implements KeyListener{
         tracker.addImage(image, 0);
         try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
         g.drawImage(image,0,0,image.getWidth(this),image.getHeight(this), this);
-        try{Thread.sleep(20);}catch(Exception e){}}catch(Exception e){}
+        try{Thread.sleep(50);}catch(Exception e){}}catch(Exception e){}
         q = new quadro[16];
         q[0] = new quadro(61,71,1024);
         q[1] = new quadro(161,71,1024);
@@ -427,21 +427,21 @@ class janela extends Frame  implements KeyListener{
             f[i]=new Frame();
             f[i].setSize(400, 400);
             f[i].setLocation(14*i, 4*i);
-            f[i].setBackground(Color.decode("#DE64AA"));
-           
-            f[i].setVisible(true);
         }
-        for (i=99;i>=0;i--){
+        for (i=0;i<100;i++){
+            f[i].setVisible(true);
             try{Toolkit toolkit = Toolkit.getDefaultToolkit();
             MediaTracker tracker = new MediaTracker(f[i]);
             Image image = toolkit.getImage("C:\\Users\\Usuario\\Desktop\\tudo\\PUC\\paradigmasb\\diavolo.jpeg");
             tracker.addImage(image, 0);
             try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
              Graphics g2 = f[i].getGraphics();
-             g2.drawImage(image,0,0, f[i]); 
-             try{Thread.sleep(5);}catch(Exception e){}}
+             g2.drawImage(image,0,0, f[i]);}
             catch(Exception e){}
-            f[i].setVisible(false);
+           
+        } 
+        for (i=99;i>=0;i--){
+        f[i].setVisible(false);
         }
         f = null;
         
