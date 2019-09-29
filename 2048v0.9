@@ -26,6 +26,7 @@ class janela extends Frame  implements KeyListener{
     public boolean kingcrimson=false;
     public boolean pause = false;
     public boolean win= false;
+    public boolean lose = false;
     public janela() {
         score = 0;
         setSize(521,521);
@@ -50,52 +51,55 @@ class janela extends Frame  implements KeyListener{
    
     public void paint(Graphics g){
         if(win){
-            Font stringFont = new Font( "SansSerif", Font.PLAIN, 42 );
-            g.setFont(stringFont);
-            g.drawString("You Win", 260, 260);
+            this.win(g);
         }
         else{
-        if(requiem){
-            this.gold_experience_requiem(g);
-            try{Thread.sleep(20);}catch(Exception e){}
-            requiem = false;
-            repaint();
-        }
-        if(kingcrimson){
-            this.king_crimson(g);
-            kingcrimson=false;
-            repaint();
-        }
-        this.draw_background(g);
-        for(int i=0;i<this.q.length;i++){
-            try{
-                
-                if(q[i].merging){
-                    score = score+q[i].valor;
-                    q[i].animate_merge(g);
-                   
-                    }
-                else
-                    if(q[i].block_collided)
-                        q[i].animate_collision(g);
-                this.q[i].block_collided=false;
-                this.q[i].merging = false;
-                
-                q[i].draw(g);
+            if(lose){
+                this.lose(g);
             }
+            else{
+                if(requiem){
+                this.gold_experience_requiem(g);
+                try{Thread.sleep(20);}catch(Exception e){}
+                requiem = false;
+                repaint();
+                }
+                if(kingcrimson){
+                this.king_crimson(g);
+                kingcrimson=false;
+                repaint();
+                }
+                this.draw_background(g);
+                for(int i=0;i<this.q.length;i++){
+                    try{
+                
+                        if(q[i].merging){
+                            score = score+q[i].valor;
+                            q[i].animate_merge(g);
+                   
+                            }
+                    else
+                            if(q[i].block_collided)
+                                q[i].animate_collision(g);
+                            this.q[i].block_collided=false;
+                            this.q[i].merging = false;
+                
+                            q[i].draw(g);
+                        }
            
-            catch(Exception e){}
-        try{Thread.sleep(2);}catch(Exception e){}
+                        catch(Exception e){}
+                        try{Thread.sleep(2);}catch(Exception e){}
         
-        }
-        this.draw_background(g);
-        for(int i=0;i<this.q.length;i++){
-            try{
-                q[i].draw(g);
-            }catch(Exception e){}
-       g.drawString(Integer.toString(this.score),350 ,40 );
+                }
+                this.draw_background(g);
+                for(int i=0;i<this.q.length;i++){
+                    try{
+                        q[i].draw(g);
+                    }catch(Exception e){}
+                    g.drawString(Integer.toString(this.score),350 ,40 );
        
-    }
+                    }
+            }
         }
 }
    
@@ -363,6 +367,7 @@ class janela extends Frame  implements KeyListener{
                     charak= false;
                     pause = false;
                     win = false;
+                    lose = false;
                     if(charag && charae){
                         requiem = true;
                         charag=false;
@@ -383,9 +388,19 @@ class janela extends Frame  implements KeyListener{
         try{
             for(i=0;i<q.length;i++)
                 if(q[i].valor == 2048){
-                    this.win();
+                    win=true;
+                    pause = true;
+                    repaint();
                             }}
             catch(Exception e){}
+        if(num == 16){
+            if(!this.possible_moves()){
+                repaint();
+                lose = true;
+                pause = true;
+                repaint();
+            }
+        }
         try{
         for(i=0; i<q.length;i++){
             if(q[i].moved || q[i].merging){
@@ -407,7 +422,7 @@ class janela extends Frame  implements KeyListener{
     }
    
     public void initialize(){
-        q = new quadro[16];
+        q = new quadro[17];
         this.score = 0;
         for(int j = 0;j<2;j++){
         generate_block(j);
@@ -486,11 +501,35 @@ class janela extends Frame  implements KeyListener{
         
     }
     
-    public void win(){
-        this.pause = true;
-        this.win = true;
+    public void win(Graphics g){
+        Font stringFont = new Font("arial" ,Font.PLAIN, 42 );
+        g.setFont(stringFont);
+        g.drawString("You Win", 170, 260);
+        stringFont = new Font("arial",Font.PLAIN,16);
+        g.setFont(stringFont);
+        g.drawString("Press r to restart", 180, 300);
     }
     
+    public boolean possible_moves(){
+        int i;
+        try{
+            for(i = 0;i<q.length;i++){
+                if(q[i].possible_move(q))
+                    return true;
+        
+            } 
+        }catch(Exception e){}
+        return false;
+    }
+    
+    public void lose(Graphics g){
+        Font stringFont = new Font("arial" ,Font.PLAIN, 42 );
+        g.setFont(stringFont);
+        g.drawString("You lose", 170, 260);
+        stringFont = new Font("arial",Font.PLAIN,16);
+        g.setFont(stringFont);
+        g.drawString("Press r to restart", 180, 300);
+    }
 }
 
 abstract class Tile {
@@ -696,6 +735,21 @@ class quadro extends Tile {
             g.setColor(Color.BLACK);
             g.drawRect(this.x+10*k/250,this.y+10*k/250,80,80);
         }
+    }
+    
+    public boolean possible_move(quadro[] q){
+        int i;
+        try{
+            for(i=0;i<q.length;i++){
+                if((q[i].x == this.x && q[i].y == this.y+100 && q[i].valor == this.valor) ||
+                        (q[i].x == this.x && q[i].y == this.y -100 && q[i].valor == this.valor)||
+                        (q[i].x == this.x -100 && q[i].y == this.y && q[i].valor == this.valor) ||
+                        (q[i].x == this.x +100 && q[i].y == this.y && q[i].valor == this.valor)
+                        )
+                    return true;
+            }
+        }catch(Exception e){}
+        return false;
     }
 }
 
