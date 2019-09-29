@@ -24,6 +24,8 @@ class janela extends Frame  implements KeyListener{
     public boolean charae = false;
     public boolean requiem = false;
     public boolean kingcrimson=false;
+    public boolean pause = false;
+    public boolean win= false;
     public janela() {
         score = 0;
         setSize(521,521);
@@ -47,6 +49,12 @@ class janela extends Frame  implements KeyListener{
     }
    
     public void paint(Graphics g){
+        if(win){
+            Font stringFont = new Font( "SansSerif", Font.PLAIN, 42 );
+            g.setFont(stringFont);
+            g.drawString("You Win", 260, 260);
+        }
+        else{
         if(requiem){
             this.gold_experience_requiem(g);
             try{Thread.sleep(20);}catch(Exception e){}
@@ -88,6 +96,7 @@ class janela extends Frame  implements KeyListener{
        g.drawString(Integer.toString(this.score),350 ,40 );
        
     }
+        }
 }
    
     public void keyPressed(KeyEvent ke){
@@ -97,6 +106,7 @@ class janela extends Frame  implements KeyListener{
         switch(keyCode){
        
             case KeyEvent.VK_UP:
+                if(!pause){
                 charak = false;
                 charag=false;
                 charae=false;
@@ -121,9 +131,11 @@ class janela extends Frame  implements KeyListener{
                         i=0;
                         this.num = this.change;
                         }
+                }
                 }
                 break;
                 case KeyEvent.VK_W:
+                if(!pause){
                 charak = false;
                 charag=false;
                 charae=false;
@@ -149,8 +161,11 @@ class janela extends Frame  implements KeyListener{
                         this.num = this.change;
                         }
                 }
+                }
                 break;
+                
             case KeyEvent.VK_LEFT:
+                if(!pause){
                 charak = false;
                 charag=false;
                 charae=false;
@@ -175,9 +190,11 @@ class janela extends Frame  implements KeyListener{
                         i=0;
                         this.num = this.change;
                         }
-                }
+                }}
                 break;
+                
                 case KeyEvent.VK_A:
+                    if(!pause){
                     charak = false;
                     charag=false;
                     charae=false;
@@ -203,8 +220,12 @@ class janela extends Frame  implements KeyListener{
                         this.num = this.change;
                         }
                 }
+                    }
+                    
                 break;
+                    
             case KeyEvent.VK_RIGHT:
+                if(!pause){
                 charak = false;
                 charag=false;
                 charae=false;
@@ -230,10 +251,12 @@ class janela extends Frame  implements KeyListener{
                         this.num = this.change;
                         }
                 }
-               
+                }
                 break;
+                
                 case KeyEvent.VK_D:
-                charak = false;
+                    if(!pause){
+                    charak = false;
                 charag=false;
                 charae=false;                    
                 for(i=0;i<this.num;i++){
@@ -258,9 +281,10 @@ class janela extends Frame  implements KeyListener{
                         this.num = this.change;
                         }
                 }
-               
+                    }
                 break;
             case KeyEvent.VK_DOWN:
+                if(!pause){
                 charak = false;
                 charag=false;
                 charae=false;
@@ -288,9 +312,10 @@ class janela extends Frame  implements KeyListener{
                 }
                
                
-               
+                }
                 break;
                 case KeyEvent.VK_S:
+                    if(!pause){
                     charak = false;
                     charag=false;
                     charae=false;
@@ -318,20 +343,26 @@ class janela extends Frame  implements KeyListener{
                 }
                
                
-               
+                    }
                 break;
                 case KeyEvent.VK_K:
+                    if(!pause){
                     charak = true;
+                    }
                     break;
                     
                 case KeyEvent.VK_C:
+                    if(!pause){
                     if(charak){
                         charak = false;
                         kingcrimson=true;
                     }
+                    }
                 break;
                 case KeyEvent.VK_R:
                     charak= false;
+                    pause = false;
+                    win = false;
                     if(charag && charae){
                         requiem = true;
                         charag=false;
@@ -350,12 +381,19 @@ class janela extends Frame  implements KeyListener{
                  
         }
         try{
-        for(i=0; i<16;i++)
+            for(i=0;i<q.length;i++)
+                if(q[i].valor == 2048){
+                    this.win();
+                            }}
+            catch(Exception e){}
+        try{
+        for(i=0; i<q.length;i++){
             if(q[i].moved || q[i].merging){
                 generate_block(num);
                 num+=1;
                 break;
             }
+        }
         }
         catch(Exception e){}
         repaint();
@@ -446,6 +484,11 @@ class janela extends Frame  implements KeyListener{
         }
         f = null;
         
+    }
+    
+    public void win(){
+        this.pause = true;
+        this.win = true;
     }
     
 }
