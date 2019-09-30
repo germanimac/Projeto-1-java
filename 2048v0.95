@@ -56,7 +56,7 @@ class janela extends Frame{
     }
    
     public void paint(Graphics g){
-        
+       
         if(win){
             this.win(g);
         }
@@ -95,7 +95,7 @@ class janela extends Frame{
                         }
            
                         catch(Exception e){}
-                        try{Thread.sleep(2);}catch(Exception e){}
+                        try{Thread.sleep(10);}catch(Exception e){}
         
                 }
                 this.draw_background(g);
@@ -108,13 +108,21 @@ class janela extends Frame{
                     }
             }
         }
-        if(!k.key_pressed && !m.mousedrag){
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        repaint();
+        
+        test_input();
+        
+        
+}
+   synchronized void test_input(){
+       if(!k.key_pressed && !m.mousedrag){
+            try {
+                this.wait(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if(!k.key_pressed && !m.mousedrag)
+                repaint();
+            
         }
         
         
@@ -127,7 +135,8 @@ class janela extends Frame{
             this.Update(m.dir);
         }
         
-}
+   }
+   
    
     public void Update(int dir){
         int i;
@@ -280,6 +289,7 @@ class janela extends Frame{
                         charae=false;
                     }
                     this.initialize();
+                    
                     break;
                 case 8:
                     charak= false;
@@ -290,6 +300,7 @@ class janela extends Frame{
                     charae=true;
                     break;
         }
+        if(dir != 5 && dir != 6 && dir != 7 && dir != 8 && dir != 9){
         try{
             for(i=0;i<q.length;i++)
                 if(q[i].valor == 2048){
@@ -315,7 +326,7 @@ class janela extends Frame{
             }
         }
         }
-        catch(Exception e){}
+        catch(Exception e){}}
         repaint();
        
     }
@@ -363,7 +374,7 @@ class janela extends Frame{
         try{
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         MediaTracker tracker = new MediaTracker(this);
-        Image image = toolkit.getImage("C:\\Users\\Usuario\\Desktop\\tudo\\PUC\\paradigmasb\\kingcrimson.jpg");
+        Image image = toolkit.getImage("kingcrimson.jpg");
         tracker.addImage(image, 0);
         try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
         g.drawImage(image,0,0,image.getWidth(this),image.getHeight(this), this);
@@ -387,7 +398,7 @@ class janela extends Frame{
             f[i].setVisible(true);
             try{Toolkit toolkit = Toolkit.getDefaultToolkit();
             MediaTracker tracker = new MediaTracker(f[i]);
-            Image image = toolkit.getImage("C:\\Users\\Usuario\\Desktop\\tudo\\PUC\\paradigmasb\\diavolo.jpeg");
+            Image image = toolkit.getImage("diavolo.jpeg");
             tracker.addImage(image, 0);
             try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
              Graphics g2 = f[i].getGraphics();
@@ -714,10 +725,15 @@ class mousel implements MouseListener{
                             this.dir = 4;
                         else
                             this.dir = 1;
-                        
-                
-            
-}}
+                this.test_input();
+    }
+    
+    synchronized void test_input(){
+       
+            this.notifyAll();
+        }
+
+}
 
 class keyl implements KeyListener{
     boolean key_pressed = false;
@@ -768,10 +784,15 @@ class keyl implements KeyListener{
         }
 }
     public void keyReleased(KeyEvent e){
-        
+        this.test_input();
     }
     
     public void keyTyped(KeyEvent e){
     
     }
+    
+    synchronized void test_input(){
+       
+            this.notifyAll();
+        }
 }
