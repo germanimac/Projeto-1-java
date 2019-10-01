@@ -1,3 +1,7 @@
+//TRABALHO DE PARADIGMAS DE PROGRAMAÇÃO B
+//PROFESSOR: LEANDRO AFONSO XASTRE
+//ALUNOS:   GABRIEL GONÇALVES MATTOS SANTINI     RA: 18189084
+//          MARCELO GERMANI OLMOS                RA: 18048298  
 package desenhar;
 import java.awt.*;
 import java.awt.event.*;
@@ -5,6 +9,7 @@ import java.awt.image.*;
 import java.math.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 public class Desenhar extends Frame {
    
@@ -12,13 +17,17 @@ public class Desenhar extends Frame {
      * @param args the command line arguments
      */
     public static void main(String[] args){
-        new janela().show();
+        //inicia o jogo
+        new janela().show();                                                    
     }    
 }
 
-class janela extends Frame implements KeyListener, MouseListener{
-    quadro[] q = new quadro[16];
+class janela extends Frame implements KeyListener, MouseListener{               //declara a classe janela, implementando o mouse e o teclado e extendendo o frame
+    quadro[] q;                                               
     tile_background[] t = new tile_background[16];
+    
+    //declaração de todas as variaveis gerais da classe
+    
     public int num;
     public int change;
     public int score; 
@@ -32,51 +41,55 @@ class janela extends Frame implements KeyListener, MouseListener{
     public boolean lose = false;
     int xi,xf,yi,yf;
     
+    //define as propriedades da janela e gera o tile-background
     public janela() {
-        score = 0;
+        setIconImage(new ImageIcon("pannamonio.jpg").getImage());
         this.addMouseListener(this);
         setSize(521,521);
         setTitle("2048");
-        for (int i=0; i<this.num;i++)
-        this.q[i] = q[i];
+        
         addKeyListener(this);
         addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent we){
                 System.exit(0);
             }
         });
-        //generate tile background
+        //gera os quadrados do fundo
         for(int i=0;i<16;i++){
             t[i] = new tile_background();
             this.t[i].x = i%4 * 100 + 61;
             this.t[i].y =  (int)i/4 * 100 + 71;
             }
         this.initialize();
+        //auxilia no teste de merge
         this.change = this.num;
     }
    
     public void paint(Graphics g){
-        
+        //printa a tela de vitória
         if(win){
             this.win(g);
         }
         else{
+            //printa a tela de derrota
             if(lose){
                 this.lose(g);
             }
             else{
+                //primeiro easter egg, aonde cria varias telas e reenicia o jogo
                 if(requiem){
                 this.gold_experience_requiem(g);
                 try{Thread.sleep(20);}catch(Exception e){}
                 requiem = false;
-                repaint();
                 }
+                //segundo easter egg, aonde o jogo vai direto para o final
                 if(kingcrimson){
                 this.king_crimson(g);
                 kingcrimson=false;
                 repaint();
                 }
                 this.draw_background(g);
+                //desenha as animações
                 for(int i=0;i<this.q.length;i++){
                     try{
                 
@@ -95,15 +108,16 @@ class janela extends Frame implements KeyListener, MouseListener{
                         }
            
                         catch(Exception e){}
-                        try{Thread.sleep(2);}catch(Exception e){}
+                        try{Thread.sleep(15);}catch(Exception e){}
         
                 }
-                this.draw_background(g);
-                for(int i=0;i<this.q.length;i++){
+                //redesenha o jogo após a animação
+                this.draw_background(g);                
+                for(int i=0;i<16;i++){
                     try{
                         q[i].draw(g);
                     }catch(Exception e){}
-                    g.drawString(Integer.toString(this.score),350 ,40 );
+                    g.drawString("Score: " + Integer.toString(this.score),350 ,45 );
        
                     }
             }
@@ -111,10 +125,11 @@ class janela extends Frame implements KeyListener, MouseListener{
         
         
 }
-   
+    //função responsavel pelo movimento e pelas easter eggs
     public void Update(int dir){
         int i;
         switch(dir){
+            //movimenta as peças para cima
             case 1:
                 if(!pause){
                 charak = false;
@@ -145,7 +160,7 @@ class janela extends Frame implements KeyListener, MouseListener{
                 }
                 break;
                 
-                
+            //movimenta as peças para a esquerda   
             case 2:
                 if(!pause){
                 charak = false;
@@ -174,7 +189,8 @@ class janela extends Frame implements KeyListener, MouseListener{
                         }
                 }}
                 break;
-                
+            
+            //movimenta as peças para a direita
             case 3:
                 if(!pause){
                 charak = false;
@@ -205,7 +221,7 @@ class janela extends Frame implements KeyListener, MouseListener{
                 }
                 break;
                 
-                
+            //movimenta as peças para baixo    
             case 4:
                 if(!pause){
                 charak = false;
@@ -238,12 +254,14 @@ class janela extends Frame implements KeyListener, MouseListener{
                 }
                 break;
                 
+                //faz o inicio da easter egg, setando uma flag para o proximo input
                 case 5:
                     if(!pause){
                     charak = true;
                     }
                     break;
-                    
+                
+                //verifica se a flag charak foi ativa, assim iniciando o easter egg "king crimson"
                 case 6:
                     if(!pause){
                     if(charak){
@@ -252,6 +270,7 @@ class janela extends Frame implements KeyListener, MouseListener{
                     }
                     }
                 break;
+                //seta algumas flags como falsas e testa se as flags charag e charae sao verdadeiras assim iniciando o easter egg "Gold Experience Requiem"
                 case 7:
                     charak= false;
                     pause = false;
@@ -264,27 +283,30 @@ class janela extends Frame implements KeyListener, MouseListener{
                     }
                     this.initialize();
                     break;
+                //seta a flag charak como falsa e a flag charag como true
                 case 8:
                     charak= false;
                     charag=true;
                     break;
+                //seta a flag charak como falsa e a flag charae como true
                 case 9:
                     charak= false;
                     charae=true;
                     break;
         }
+        //verifica se o input nao é nenhuma flag
         if(dir != 5 && dir != 6 && dir != 7 && dir != 8 && dir != 9){
         try{
+            //checa vitória e ativa as flags nescessarias
             for(i=0;i<q.length;i++)
                 if(q[i].valor == 2048){
                     win=true;
                     pause = true;
-                    repaint();
                             }}
             catch(Exception e){}
+        //checa derrota e ativa as flags nescessarias
         if(num == 16){
             if(!this.possible_moves()){
-                repaint();
                 lose = true;
                 pause = true;
                 repaint();
@@ -304,7 +326,7 @@ class janela extends Frame implements KeyListener, MouseListener{
        
     }
       
-   
+    //inicializa os blocos; o score em 0 e gera 2 blocos 
     public void initialize(){
         q = new quadro[17];
         this.score = 0;
@@ -315,23 +337,30 @@ class janela extends Frame implements KeyListener, MouseListener{
         return;
     }
    
+    //gera um bloco em uma posição aleatoria
     public void generate_block(int j){
         int contcoord = 0;
         int[] coord = new int [32];
         for(int i = 0;i<t.length;i++)
+            //verifica para cada tile background, se não tem nenhum bloco em cima 
             if(t[i].isopen(this.q)){
+                //gera e insere em um vetor todas as coordenadas possiveis para inserir o bloco
                 coord[2*contcoord]= t[i].x;
                 coord[(2*contcoord)+1] = t[i].y;
                 contcoord++;
             }
+        //gera a coordenada aonde o bloco será alocado
         int a = (int)(Math.random() * contcoord);
+        //seta o proximo bloco como 2 ou 4, dependendo da porcentagem de chance
         double b = (Math.random() * 100);
         int v;
         if(b<20)v=4;
         else v=2;
+        //seta o bloco de tamanho aleatorio na posição alocada previamente
         this.q[j] = new quadro(coord[2*a],coord[2*a+1],v);
     }
    
+    //desenha a linha de border, desenha o fundo e desenha cada um dos quadradinhos azuis claro
     public void draw_background(Graphics g){
         g.setColor(Color.BLACK);
         g.drawRect(40, 50, 421, 421);
@@ -342,9 +371,11 @@ class janela extends Frame implements KeyListener, MouseListener{
             g.fillRect(this.t[i].x, this.t[i].y, 80, 80);
         }
     }
-   
+    
+    //coloca na tela a imagem de easter egg do king crimson, e após isso, seta dois blocos nos valores de 1024 um do lado do outro
     public void king_crimson(Graphics g){
         try{
+        //coloca imagen
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         MediaTracker tracker = new MediaTracker(this);
         Image image = toolkit.getImage("kingcrimson.jpg");
@@ -352,21 +383,26 @@ class janela extends Frame implements KeyListener, MouseListener{
         try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
         g.drawImage(image,0,0,image.getWidth(this),image.getHeight(this), this);
         try{Thread.sleep(50);}catch(Exception e){}}catch(Exception e){}
-        q = new quadro[16];
+        //seta os blocos de 1024
+        q = new quadro[17];
         q[0] = new quadro(61,71,1024);
         q[1] = new quadro(161,71,1024);
         this.num =2;
     }
     
+    //abre diversas janelas no jogo e as fecha, após isso reseta o jogo
     public void gold_experience_requiem(Graphics g){
         int i;
+        
         Frame[] f = new Frame[200];
+        //gera os diversos frames
         for(i=0;i<100;i++){
             f[i]=new Frame();
             f[i].setSize(400, 400);
             f[i].setLocation(14*i, 4*i);
             f[i].setTitle("Wha_");
         }
+        //coloca a imagem em cada um deles e os faz ficar viziveis
         for (i=0;i<100;i++){
             try{Thread.sleep(20);}catch(Exception e){}
             f[i].setVisible(true);
@@ -378,7 +414,8 @@ class janela extends Frame implements KeyListener, MouseListener{
              Graphics g2 = f[i].getGraphics();
              g2.drawImage(image,0,0, f[i]);}
             catch(Exception e){}
-        } 
+        }
+        //apaga todas as imagens e limpa esse vetor
         for (i=99;i>=0;i--){
         f[i].setVisible(false);
         }
@@ -386,6 +423,7 @@ class janela extends Frame implements KeyListener, MouseListener{
         
     }
     
+    //imprime a mensagem de vitoria
     public void win(Graphics g){
         Font stringFont = new Font("arial" ,Font.PLAIN, 42 );
         g.setFont(stringFont);
@@ -395,6 +433,7 @@ class janela extends Frame implements KeyListener, MouseListener{
         g.drawString("Press r to restart", 180, 300);
     }
     
+    //testa se existe algum movimento possivel, retornando true se tiver e false se nao tiver
     public boolean possible_moves(){
         int i;
         try{
@@ -406,7 +445,7 @@ class janela extends Frame implements KeyListener, MouseListener{
         }catch(Exception e){}
         return false;
     }
-    
+    //imprime a mensagem de derrota 
     public void lose(Graphics g){
         Font stringFont = new Font("arial" ,Font.PLAIN, 42 );
         g.setFont(stringFont);
@@ -414,9 +453,15 @@ class janela extends Frame implements KeyListener, MouseListener{
         stringFont = new Font("arial",Font.PLAIN,16);
         g.setFont(stringFont);
         g.drawString("Press r to restart", 180, 300);
+        g.drawString("Type \"kc\" to go straight to the last move",120,330);
     }
     
+    
     public void keyPressed(KeyEvent e){
+        
+    }
+    //reedireciona as entradas do teclado para os movimentos e para os easter eggs
+    public void keyReleased(KeyEvent e){
         int keyCode = e.getKeyCode();
         switch (keyCode){
             case KeyEvent.VK_W : 
@@ -451,9 +496,6 @@ class janela extends Frame implements KeyListener, MouseListener{
                 this.Update(9);
                 break;
         }
-}
-    public void keyReleased(KeyEvent e){
-        
     }
     
     public void keyTyped(KeyEvent e){
@@ -466,6 +508,12 @@ class janela extends Frame implements KeyListener, MouseListener{
     
     public void mouseEntered(MouseEvent e){}
     
+    //pega as posições em X e Y iniciais do mouse 
+    public void mousePressed (MouseEvent e){
+        this.xi = e.getX();
+        this.yi = e.getY();
+    }
+    //pega as posições em X e Y finais do mouse e chama a função de arrasto do mouse
     public void mouseReleased(MouseEvent e){
         this.xf = e.getX();
         this.yf = e.getY();
@@ -475,16 +523,15 @@ class janela extends Frame implements KeyListener, MouseListener{
     public void mouseClicked(MouseEvent e){
     }
     
-    public void mousePressed (MouseEvent e){
-        this.xi = e.getX();
-        this.yi = e.getY();
-    }
-
+   
+    //compara a diferença entre as posições iniciais e finais de X e Y, 
+    //e calcula a direção, levando para o movimento adequado 
     public void mousedragged(){
                 int dx = this.xf - this.xi;
                 int dy = this.yf - this.yi;
                 if(Math.abs(dx) > Math.abs(dy))
-                    if(dx > 0)this.Update(3);
+                    if(dx > 0)
+                        this.Update(3);
                     else
                         this.Update(2);
                     else
@@ -495,6 +542,7 @@ class janela extends Frame implements KeyListener, MouseListener{
                         
 }}
 
+//serve como molde para o quadro
 abstract class Tile {
     int x,y,valor;
     abstract boolean collision(quadro[] q, int k, int num);
@@ -503,7 +551,7 @@ abstract class Tile {
    
 }
 
-class quadro extends Tile {
+class quadro extends Tile {//quadro == peça
     int x,y,valor;
     boolean merging;
     int num;
@@ -612,6 +660,7 @@ class quadro extends Tile {
         }
         return num;
     }
+    //faz a união entre dois quadros
     public void merge(quadro[] q,int i,int num){
         this.valor = 2*this.valor;
         this.merging = true;
@@ -622,6 +671,7 @@ class quadro extends Tile {
         
     }
    
+    //desenha os quadros
     public void draw(Graphics g){
        
         g.setColor(c);
@@ -635,6 +685,7 @@ class quadro extends Tile {
         g.drawString("" + this.valor, this.x+40, this.y +40);
     }
    
+    //gera as cores para os quadros
     public void generate_color(){
         switch(this.valor){
             case 2:
@@ -718,7 +769,7 @@ class quadro extends Tile {
 
 class tile_background {
     public int x,y;
-
+    //gera a posição dos blocos azul-claros
     public tile_background(int x, int y) {
         this.x = x;
         this.y = y;
@@ -726,7 +777,7 @@ class tile_background {
 
     public tile_background() {
     }
-       
+    //verifica se é posivel colocar um bloco em cima do tile que está na posição(X,Y)   
     public boolean isopen(quadro[] q){
         try{
         for (int i=0;i<q.length;i++){
