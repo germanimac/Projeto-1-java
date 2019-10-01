@@ -273,6 +273,7 @@ class janela extends Frame implements KeyListener, MouseListener{
                     charae=true;
                     break;
         }
+        if(dir != 5 && dir != 6 && dir != 7 && dir != 8 && dir != 9){
         try{
             for(i=0;i<q.length;i++)
                 if(q[i].valor == 2048){
@@ -298,7 +299,7 @@ class janela extends Frame implements KeyListener, MouseListener{
             }
         }
         }
-        catch(Exception e){}
+        catch(Exception e){}}
         repaint();
        
     }
@@ -346,7 +347,7 @@ class janela extends Frame implements KeyListener, MouseListener{
         try{
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         MediaTracker tracker = new MediaTracker(this);
-        Image image = toolkit.getImage("C:\\Users\\Usuario\\Desktop\\tudo\\PUC\\paradigmasb\\kingcrimson.jpg");
+        Image image = toolkit.getImage("kingcrimson.jpg");
         tracker.addImage(image, 0);
         try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
         g.drawImage(image,0,0,image.getWidth(this),image.getHeight(this), this);
@@ -367,10 +368,11 @@ class janela extends Frame implements KeyListener, MouseListener{
             f[i].setTitle("Wha_");
         }
         for (i=0;i<100;i++){
+            try{Thread.sleep(20);}catch(Exception e){}
             f[i].setVisible(true);
             try{Toolkit toolkit = Toolkit.getDefaultToolkit();
             MediaTracker tracker = new MediaTracker(f[i]);
-            Image image = toolkit.getImage("C:\\Users\\Usuario\\Desktop\\tudo\\PUC\\paradigmasb\\diavolo.jpeg");
+            Image image = toolkit.getImage("diavolo.jpeg");
             tracker.addImage(image, 0);
             try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
              Graphics g2 = f[i].getGraphics();
@@ -737,6 +739,3 @@ class tile_background {
     }
    
 }
-
-
-
