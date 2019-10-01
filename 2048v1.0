@@ -16,7 +16,7 @@ public class Desenhar extends Frame {
     }    
 }
 
-class janela extends Frame{
+class janela extends Frame implements KeyListener, MouseListener{
     quadro[] q = new quadro[16];
     tile_background[] t = new tile_background[16];
     public int num;
@@ -30,16 +30,16 @@ class janela extends Frame{
     public boolean pause = false;
     public boolean win= false;
     public boolean lose = false;
-    mousel m = new mousel();
-    keyl k = new keyl();
+    int xi,xf,yi,yf;
+    
     public janela() {
         score = 0;
-        this.addMouseListener(m);
+        this.addMouseListener(this);
         setSize(521,521);
         setTitle("2048");
         for (int i=0; i<this.num;i++)
         this.q[i] = q[i];
-        addKeyListener(k);
+        addKeyListener(this);
         addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent we){
                 System.exit(0);
@@ -108,24 +108,7 @@ class janela extends Frame{
                     }
             }
         }
-        if(!k.key_pressed && !m.mousedrag){
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        repaint();
-        }
         
-        
-        if(k.key_pressed){
-            k.key_pressed= false;
-            this.Update(k.dir);
-        }
-        if(m.mousedrag){
-            m.mousedrag= false;
-            this.Update(m.dir);
-        }
         
 }
    
@@ -430,7 +413,85 @@ class janela extends Frame{
         g.setFont(stringFont);
         g.drawString("Press r to restart", 180, 300);
     }
+    
+    public void keyPressed(KeyEvent e){
+        int keyCode = e.getKeyCode();
+        switch (keyCode){
+            case KeyEvent.VK_W : 
+            case KeyEvent.VK_UP:
+                this.Update(1);
+                break;
+            case KeyEvent.VK_A:
+            case KeyEvent.VK_LEFT:
+                this.Update(2);
+                break;
+            case KeyEvent.VK_D:
+            case KeyEvent.VK_RIGHT:
+                this.Update(3);
+                break;
+            case KeyEvent.VK_S:
+            case KeyEvent.VK_DOWN:
+                this.Update(4);
+                break;
+            case KeyEvent.VK_K:
+                this.Update(5);
+                break;
+            case KeyEvent.VK_C:
+                this.Update(6);
+                break;
+            case KeyEvent.VK_R:
+                this.Update(7);
+                break;
+            case KeyEvent.VK_G:
+                this.Update(8);
+                break;
+            case KeyEvent.VK_E:
+                this.Update(9);
+                break;
+        }
 }
+    public void keyReleased(KeyEvent e){
+        
+    }
+    
+    public void keyTyped(KeyEvent e){
+    
+    }
+    
+    public void mouseExited(MouseEvent e){
+        
+    }
+    
+    public void mouseEntered(MouseEvent e){}
+    
+    public void mouseReleased(MouseEvent e){
+        this.xf = e.getX();
+        this.yf = e.getY();
+        this.mousedragged();
+    }
+    
+    public void mouseClicked(MouseEvent e){
+    }
+    
+    public void mousePressed (MouseEvent e){
+        this.xi = e.getX();
+        this.yi = e.getY();
+    }
+
+    public void mousedragged(){
+                int dx = this.xf - this.xi;
+                int dy = this.yf - this.yi;
+                if(Math.abs(dx) > Math.abs(dy))
+                    if(dx > 0)this.Update(3);
+                    else
+                        this.Update(2);
+                    else
+                        if(dy>0)
+                            this.Update(4);
+                        else
+                            this.Update(1);
+                        
+}}
 
 abstract class Tile {
     int x,y,valor;
@@ -677,101 +738,5 @@ class tile_background {
    
 }
 
-class mousel implements MouseListener{
-    int xi,xf,yi,yf;
-    boolean mousedrag =false;
-    int dir;
-    public void mouseExited(MouseEvent e){
-        
-    }
-    
-    public void mouseEntered(MouseEvent e){}
-    
-    public void mouseReleased(MouseEvent e){
-        this.xf = e.getX();
-        this.yf = e.getY();
-        this.mousedragged();
-    }
-    
-    public void mouseClicked(MouseEvent e){
-    }
-    
-    public void mousePressed (MouseEvent e){
-        this.xi = e.getX();
-        this.yi = e.getY();
-    }
 
-    public void mousedragged(){
-                this.mousedrag = true;
-                int dx = this.xf - this.xi;
-                int dy = this.yf - this.yi;
-                if(Math.abs(dx) > Math.abs(dy))
-                    if(dx > 0)this.dir = 3;
-                    else
-                        this.dir = 2;
-                    else
-                        if(dy>0)
-                            this.dir = 4;
-                        else
-                            this.dir = 1;
-                        
-                
-            
-}}
 
-class keyl implements KeyListener{
-    boolean key_pressed = false;
-    int dir=0;
-    public void keyPressed(KeyEvent e){
-        int keyCode = e.getKeyCode();
-        switch (keyCode){
-            case KeyEvent.VK_W : 
-            case KeyEvent.VK_UP:
-                this.dir = 1;
-                this.key_pressed = true;
-                break;
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_LEFT:
-                this.dir = 2;
-                this.key_pressed = true;
-                break;
-            case KeyEvent.VK_D:
-            case KeyEvent.VK_RIGHT:
-                this.dir = 3;
-                this.key_pressed = true;
-                break;
-            case KeyEvent.VK_S:
-            case KeyEvent.VK_DOWN:
-                this.dir= 4;
-                this.key_pressed = true;
-                break;
-            case KeyEvent.VK_K:
-                this.dir = 5;
-                this.key_pressed=true;
-                break;
-            case KeyEvent.VK_C:
-                this.dir = 6;
-                this.key_pressed = true;
-                break;
-            case KeyEvent.VK_R:
-                this.dir = 7;
-                this.key_pressed = true;
-                break;
-            case KeyEvent.VK_G:
-                this.dir = 8;
-                this.key_pressed = true;
-                break;
-            case KeyEvent.VK_E:
-                this.dir = 9;
-                this.key_pressed = true;
-                break;
-        }
-}
-    public void keyReleased(KeyEvent e){
-        
-    }
-    
-    public void keyTyped(KeyEvent e){
-    
-    }
-}
