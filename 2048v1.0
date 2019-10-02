@@ -43,7 +43,7 @@ class janela extends Frame implements KeyListener, MouseListener{               
     
     //define as propriedades da janela e gera o tile-background
     public janela() {
-        setIconImage(new ImageIcon("pannamonio.jpg").getImage());
+        setIconImage(new ImageIcon("eric-final1.png").getImage());
         this.addMouseListener(this);
         setSize(521,521);
         setTitle("2048");
@@ -425,6 +425,12 @@ class janela extends Frame implements KeyListener, MouseListener{               
     
     //imprime a mensagem de vitoria
     public void win(Graphics g){
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        MediaTracker tracker = new MediaTracker(this);
+        Image image = toolkit.getImage("eric-final1.png");
+        tracker.addImage(image, 0);
+        try{tracker.waitForAll();}catch(Exception e){System.exit(1);}
+        g.drawImage(image,100,100,image.getWidth(this),image.getHeight(this), this);
         Font stringFont = new Font("arial" ,Font.PLAIN, 42 );
         g.setFont(stringFont);
         g.drawString("You Win", 170, 260);
@@ -551,7 +557,9 @@ abstract class Tile {
    
 }
 
-class quadro extends Tile {//quadro == peça
+
+//quadro é o bloco ou a peça que esta sendo trabalhada
+class quadro extends Tile {
     int x,y,valor;
     boolean merging;
     int num;
@@ -566,6 +574,8 @@ class quadro extends Tile {//quadro == peça
         this.generate_color();
     }
    
+    //de acordo com a direção verifica se há colisão entre os blocos
+    //e se houver, verifica se eles podem se juntar(mergir)
     public boolean collision(quadro[] q,int k, int num){
         for(int i=0;i<this.num;i++){
             switch (k){
@@ -626,6 +636,8 @@ class quadro extends Tile {//quadro == peça
         return false;}
                      
    
+    //de acordo com a direção, movimenta todos os blocos 
+    //naquela direção, até que haja uma colisão entre blocos ou se chegar na border
     public int slide(int x,quadro[] q,int num){
         this.num = num;
         switch(x){
@@ -726,6 +738,7 @@ class quadro extends Tile {//quadro == peça
         }
     }
    
+    //realiza a animacao entre dois blocos juntando
     public void animate_merge(Graphics g){
         int k = 0;
         for(k=0;k<1000;k++){
@@ -736,6 +749,7 @@ class quadro extends Tile {//quadro == peça
        
     }
     
+    //realiza a animação entre dois blocos colidindo
     public void animate_collision(Graphics g){
         int k = 0;
         for(k=k;k<250;k++){
@@ -751,21 +765,22 @@ class quadro extends Tile {//quadro == peça
         }
     }
     
+    //verifica se existe um movimento possivel 
     public boolean possible_move(quadro[] q){
         int i;
         try{
             for(i=0;i<q.length;i++){
-                if((q[i].x == this.x && q[i].y == this.y+100 && q[i].valor == this.valor) ||
-                        (q[i].x == this.x && q[i].y == this.y -100 && q[i].valor == this.valor)||
-                        (q[i].x == this.x -100 && q[i].y == this.y && q[i].valor == this.valor) ||
-                        (q[i].x == this.x +100 && q[i].y == this.y && q[i].valor == this.valor)
-                        )
+                if(     (q[i].x == this.x && q[i].y == this.y+100 && q[i].valor == this.valor)||
+                        (q[i].x == this.x && q[i].y == this.y-100 && q[i].valor == this.valor)||
+                        (q[i].x == this.x-100 && q[i].y == this.y && q[i].valor == this.valor)||
+                        (q[i].x == this.x+100 && q[i].y == this.y && q[i].valor == this.valor))
                     return true;
             }
         }catch(Exception e){}
         return false;
     }
 }
+
 
 class tile_background {
     public int x,y;
@@ -787,6 +802,5 @@ class tile_background {
         }
         catch(Exception e){}
         return true;
-    }
-   
+    }  
 }
