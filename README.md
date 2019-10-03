@@ -68,7 +68,7 @@
 </ul>
 
 # Como instalar o jogo:
-## Para instalar o jogo, é nescessario baixar o zip "desenhar.zip" e ter a IDE NetBeans instalada, 
+## Para instalar o jogo, é nescessario baixar o zip "Projeto-1-java-1.0.zip" que está no release ter a IDE NetBeans instalada, 
 <ul>
   <li>Abra o NetBeans</li> 
   <li>Clique em "arquivo" e depois clique em "importar projeto" e depois clique em "de ZIP" </li>
