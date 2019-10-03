@@ -61,7 +61,7 @@
 
 
 # A quarta classe: Tile_background
-## Função:
+## Funções:
 <ul>
   <li>A função tile_background(int x, int y) é a responsavel por gerar a posição dos blocos azul-claros;</li>
   <li>A função isopen(quadro[] q) realiza a verificação de se é possivel colocar um bloco em cima do tile presente na posição (x,y); </li>
