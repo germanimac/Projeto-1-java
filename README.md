@@ -68,4 +68,13 @@
 </ul>
 
 # Como instalar o jogo:
-## Para instalar o jogo, é nescessario ter o arquivo do 
+## Para instalar o jogo, é nescessario baixar o zip "desenhar.zip" e ter a IDE NetBeans instalada, 
+<ul>
+  <li>Abra o NetBeans</li> 
+  <li>Clique em "arquivo" e depois clique em "importar projeto" e depois clique em "de ZIP" </li>
+  <li>Ao lado de "arquivo ZIP", clique em procurar e encontre o .ZIP baixado e importe-o</li>
+  <li>Após isso, clique no icone de "+" do "Pacote de Códigos Fonte", isso abrirá algumas novas opções</li>
+  <li>Clique no icone de "+" do "desenhar" e clique em "desenhar.java"</li>
+  <li>clique em executar projeto ou use o atalho de teclado "F6"</li>
+  <li>DIVIRTA-SE</li>
+</ul>
