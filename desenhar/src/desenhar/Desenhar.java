@@ -120,6 +120,7 @@ class janela extends Frame implements KeyListener, MouseListener{               
                     try{
                         q[i].draw(g);
                     }catch(Exception e){}
+                    g.setColor(Color.BLACK);
                     g.drawString("Score: " + Integer.toString(this.score),350 ,45 );
        
                     }
